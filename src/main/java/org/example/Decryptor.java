@@ -6,10 +6,10 @@
     import java.nio.charset.StandardCharsets;
     import java.util.Arrays;
 
-    public class Receiver {
+    public class Decryptor {
         private static final byte MAGIC_BYTE = 0x13;
 
-        public Packet receive(byte[] packetData, byte[] key) throws Exception {
+        public Message decrypt(byte[] packetData, byte[] key) throws Exception {
             ByteBuffer buffer = ByteBuffer.wrap(packetData);
 
             byte bMagic = buffer.get();
@@ -44,14 +44,14 @@
             byte[] encryptedMessage = new byte[messageBuffer.remaining()];
             messageBuffer.get(encryptedMessage);
 
+            //Message decryption
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
             byte[] decryptedMessage = cipher.doFinal(encryptedMessage);
             String message = new String(decryptedMessage, StandardCharsets.UTF_8);
 
-            Message bMsg = new Message(cType, bUserId, message);
 
-            return new Packet(bMagic, bSrc, wLen, headerCrc, bMsg, msgCrc);
+            return new Message(cType, bUserId, message);
         }
     }

@@ -1,31 +1,22 @@
 package org.example;
 
 public class Packet {
-    private static long lastPktId = 0;
-
     private byte bMagic;
     private byte bSrc;
     private long bPktId;
     private int wLen;
     private short headerCrc;
-    private Message bMsg;
+    private byte[] bMsg;
     private short msgCrc;
 
-    public Packet(byte bMagic, byte bSrc, int wLen, short headerCrc, Message bMsg, short msgCrc) {
+    public Packet(byte bMagic, byte bSrc,long bPktId, int wLen, short headerCrc, byte[] bMsg, short msgCrc) {
         this.bMagic = bMagic;
         this.bSrc = bSrc;
-        this.bPktId = lastPktId;
+        this.bPktId = bPktId;
         this.wLen = wLen;
         this.headerCrc = headerCrc;
         this.bMsg = bMsg;
         this.msgCrc = msgCrc;
-    }
-
-    public Packet(byte bMagic, byte bSrc, Message bMsg) {
-        this.bMagic = bMagic;
-        this.bSrc = bSrc;
-        this.bPktId = ++lastPktId;
-        this.bMsg = bMsg;
     }
 
     public byte getBMagic() {
@@ -60,7 +51,7 @@ public class Packet {
         this.wLen = wLen;
     }
 
-    public int getHeaderCrc() {
+    public short getHeaderCrc() {
         return headerCrc;
     }
 
@@ -68,15 +59,15 @@ public class Packet {
         this.headerCrc = headerCrc;
     }
 
-    public Message getBMsg() {
+    public byte[] getBMsg() {
         return bMsg;
     }
 
-    public void setBMsg(Message bMsg) {
+    public void setBMsg(byte[] bMsg) {
         this.bMsg = bMsg;
     }
 
-    public int getMsgCrc() {
+    public short getMsgCrc() {
         return msgCrc;
     }
 
